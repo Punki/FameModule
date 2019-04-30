@@ -62,8 +62,6 @@ class Lastline(ProcessingModule):
         if not HAVE_IJSON:
             raise ModuleInitializationError(self, "Missing dependency: ijson")
 
-
-
     def each_with_type(self, target, file_type):
         # Set root URLs
         self.results = dict()
@@ -80,7 +78,7 @@ class Lastline(ProcessingModule):
         self.process_report()
 
         # Add report URL to results
-        #self.results['URL'] = urljoin(self.web_endpoint, "/analysis/{}/summary/".format(self.task_id))
+        # self.results['URL'] = urljoin(self.web_endpoint, "/analysis/{}/summary/".format(self.task_id))
 
         return True
 
@@ -111,7 +109,7 @@ class Lastline(ProcessingModule):
         waited_time = 0
         while waited_time < self.wait_timeout:
             payload = {"after": after}
-            response = requests.post(url, data=json.dumps(payload),  headers={'content-type': 'application/json'})
+            response = requests.post(url, data=json.dumps(payload), headers={'content-type': 'application/json'})
             # hole uiid von allen Taks,
             # haben wir das mehr flag gesetzt? :wenn ja hole restliche uuid
             # else
@@ -123,39 +121,41 @@ class Lastline(ProcessingModule):
             after = response.json()["data"]["before"]
             analyzedUUIDs = response.json()['data']['task']
 
+            print('analyzedUUIDs ist: ',analyzedUUIDs[0])
+            print('self.task_id ist:  ', self.task_id)
+
             # while response.json['data']['more_results_available']
             # fetch again
 
             # Todo Schleife ueber die uuids und pruefen
-            if analyzedUUIDs == self.task_id:
+            if analyzedUUIDs[0] == self.task_id:
+                print("Break !!!")
                 break
 
             time.sleep(self.wait_step)
             waited_time += self.wait_step
 
-        if analyzedUUIDs != self.task_id:
+        if analyzedUUIDs[0] != self.task_id:
             raise ModuleExecutionError('could not get report before timeout.')
-
-
 
     def process_report(self):
         url = urljoin(self.api_endpoint, '/analysis/get_result.json')
         payload = {'uuid': self.task_id}
         response = requests.post(url, data=json.dumps(payload), headers={'content-type': 'application/json'})
 
-        if response.getcode() != 200:
+        if response.status_code != 200:
             self.log('error', 'could not find report for task id {0}'.format(self.task_id))
         else:
-            #self.extract_info(response)
-            self.log('Alles Oke bis zu Analyse!')
-
-
-
+            # self.extract_info(response)
+            self.log('info','Alles Oke bis zu Analyse!')
+            self.extract_info(response)
 
     def extract_info(self, report):
         parser = ijson.parse(report)
+        print("PING!")
         self.results['signatures'] = []
         signature = dict()
+        print("PONG!")
 
         for prefix, event, value in parser:
             if prefix == "signatures.item" and event == "end_map":
