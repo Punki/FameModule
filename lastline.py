@@ -85,10 +85,10 @@ class Lastline(ProcessingModule):
         return True
 
     def define_options(self):
-        if self.allow_internet_access:
-            route = "internet"
-        else:
-            route = "drop"
+        # if self.allow_internet_access:
+        #     route = "internet"
+        # else:
+        route = "drop"
 
         return {
             'timeout': self.analysis_time,
@@ -99,7 +99,7 @@ class Lastline(ProcessingModule):
     def submit_url(self, target_url, options):
         url = urljoin(self.api_endpoint, '/papi/analysis/submit_url.json')
         options['url'] = target_url
-        response = requests.post(url, data=options)
+        response = requests.post(url, data=json.dumps(options), headers={'content-type': 'application/json'})
         self.task_id = response.json()['data']['task_uuid']
 
     def wait_for_analysis(self):
@@ -111,11 +111,11 @@ class Lastline(ProcessingModule):
         waited_time = 0
         while waited_time < self.wait_timeout:
             payload = {"after": after}
-            response = requests.post(url, data=json.dumps(payload))
+            response = requests.post(url, data=json.dumps(payload),  headers={'content-type': 'application/json'})
             # hole uiid von allen Taks,
             # haben wir das mehr flag gesetzt? :wenn ja hole restliche uuid
             # else
-            # prüfe ob die uuid übereinstimmt
+            # pruefe ob die uuid uebereinstimmt
             # break
             # else sleep and repeat
 
@@ -126,7 +126,7 @@ class Lastline(ProcessingModule):
             # while response.json['data']['more_results_available']
             # fetch again
 
-            # Todo Schleife über die uuids und prüfen
+            # Todo Schleife ueber die uuids und pruefen
             if analyzedUUIDs == self.task_id:
                 break
 
@@ -136,16 +136,21 @@ class Lastline(ProcessingModule):
         if analyzedUUIDs != self.task_id:
             raise ModuleExecutionError('could not get report before timeout.')
 
+
+
     def process_report(self):
         url = urljoin(self.api_endpoint, '/analysis/get_result.json')
         payload = {'uuid': self.task_id}
-        response = requests.post(url, data=json.dumps(payload))
+        response = requests.post(url, data=json.dumps(payload), headers={'content-type': 'application/json'})
 
         if response.getcode() != 200:
             self.log('error', 'could not find report for task id {0}'.format(self.task_id))
         else:
             #self.extract_info(response)
             self.log('Alles Oke bis zu Analyse!')
+
+
+
 
     def extract_info(self, report):
         parser = ijson.parse(report)
