@@ -160,15 +160,16 @@ class Lastline(ProcessingModule):
 
         report = data.get('report')
 
-        self.results['report'] = report
+        #self.results['report'] = report
 
+        #add signatures
         signatureTMP = dict()
         self.results['signatures'] = []
 
         for signatures in report['activities']:
             self.add_tag(signatures)
-            signatureTMP['Name']=signatures
-            self.results['signatures'].append(signatureTMP)
+            #signatureTMP['Name']=signatures
+            self.results['signatures'].append(signatures)
 
 
 
