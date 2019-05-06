@@ -121,7 +121,7 @@ class Lastline(ProcessingModule):
             after = response.json()["data"]["before"]
             analyzedUUIDs = response.json()['data']['task']
 
-            print('analyzedUUIDs ist: ',analyzedUUIDs[0])
+            print('analyzedUUIDs ist: ', analyzedUUIDs[0])
             print('self.task_id ist:  ', self.task_id)
 
             # while response.json['data']['more_results_available']
@@ -147,29 +147,43 @@ class Lastline(ProcessingModule):
             self.log('error', 'could not find report for task id {0}'.format(self.task_id))
         else:
             # self.extract_info(response)
-            self.log('info','Alles Oke bis zu Analyse!')
+            self.log('info', 'Alles Oke bis zu Analyse!')
+            # self.extract_info(response.content)
             self.extract_info(response)
 
-    def extract_info(self, report):
-        parser = ijson.parse(report)
-        print("PING!")
-        self.results['signatures'] = []
-        signature = dict()
-        print("PONG!")
+    def extract_info(self, reportFullFromWeb):
 
-        for prefix, event, value in parser:
-            if prefix == "signatures.item" and event == "end_map":
-                self.results['signatures'].append(signature)
-                signature = dict()
-            elif prefix == "signatures.item.name":
-                signature['name'] = value
-                self.add_tag(value)
-            elif prefix == "signatures.item.severity":
-                signature['severity'] = value
-            elif prefix == "signatures.item.description":
-                signature['description'] = value
-            elif prefix == "info.score":
-                self.results['score'] = float(value)
-            elif prefix in ["network.domains.item.domain", "network.hosts.item.ip", "network.http.item.uri"]:
-                if value not in ["8.8.8.8", "8.8.4.4"]:
-                    self.add_ioc(value)
+        #Add Score
+        data = reportFullFromWeb.json().get('data')
+        print("Score", data['score'])
+        self.results['score'] = float(data['score'])
+
+        report = data.get('report')
+
+        self.results['report'] = report
+
+        signatureTMP = dict()
+        self.results['signatures'] = []
+
+        for signatures in report['activities']:
+            self.add_tag(signatures)
+            signatureTMP['Name']=signatures
+            self.results['signatures'].append(signatureTMP)
+
+
+
+        # if prefix == "signatures.item" and event == "end_map":
+        #     self.results['signatures'].append(signature)
+        #     signature = dict()
+        # elif prefix == "signatures.item.name":
+        #     signature['name'] = value
+        #     self.add_tag(value)
+        # elif prefix == "signatures.item.severity":
+        #     signature['severity'] = value
+        # elif prefix == "signatures.item.description":
+        #     signature['description'] = value
+        # elif prefix == "info.score":
+        #     self.results['score'] = float(value)
+        # elif prefix in ["network.domains.item.domain", "network.hosts.item.ip", "network.http.item.uri"]:
+        #     if value not in ["8.8.8.8", "8.8.4.4"]:
+        # self.add_ioc(value)

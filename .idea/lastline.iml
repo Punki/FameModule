@@ -5,6 +5,7 @@
     <orderEntry type="jdk" jdkName="Python 2.7 (env)" jdkType="Python SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="module" module-name="PythonServer" />
+    <orderEntry type="module" module-name="cuckoo" />
   </component>
   <component name="TestRunnerService">
     <option name="PROJECT_TEST_RUNNER" value="Unittests" />
