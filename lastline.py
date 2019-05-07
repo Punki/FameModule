@@ -133,16 +133,19 @@ class Lastline(ProcessingModule):
                     taskfound = 'true'
                     # UUID wurde gefunden
                     break
-                else:
-                    time.sleep(self.wait_step)
-                    waited_time += self.wait_step
+                #else:
+                #    time.sleep(self.wait_step)
+                #    waited_time += self.wait_step
             if taskfound == 'true':
                 break
             elif waited_time > self.wait_timeout:
                 # Wirf Exception wenn Task nicht gefunden wurde
                 raise ModuleExecutionError('could not get report before timeout.')
-        print("Found TaskUUId !", taskfound)
+            else:
+                time.sleep(self.wait_step)
+                waited_time += self.wait_step
 
+        print("Found TaskUUId !", taskfound)
 
     def process_report(self):
         url = urljoin(self.api_endpoint, '/analysis/get_result.json')
@@ -159,7 +162,7 @@ class Lastline(ProcessingModule):
 
     def extract_info(self, reportFullFromWeb):
 
-        #Add Score
+        # Add Score
         data = reportFullFromWeb.json().get('data')
         print("Score", data['score'])
         self.results['score'] = float(data['score'])
@@ -178,18 +181,15 @@ class Lastline(ProcessingModule):
             signature['relevance'] = addreport.get('relevance')
             self.results['signatures'].append(signature)
 
-
-        #add signatures
-        #self.results['signatures'] = []
-        #for signatures in report['activities']:
+        # add signatures
+        # self.results['signatures'] = []
+        # for signatures in report['activities']:
         #    #add Tags
         #    self.add_tag(signatures)
         #    #Extract Signatures
         #    signature = dict()
         #    signature['name'] = signatures
         #    self.results['signatures'].append(signature)
-
-
 
         # elif prefix in ["network.domains.item.domain", "network.hosts.item.ip", "network.http.item.uri"]:
         #     if value not in ["8.8.8.8", "8.8.4.4"]:
