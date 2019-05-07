@@ -163,9 +163,10 @@ class Lastline(ProcessingModule):
 
         #add signatures
         self.results['signatures'] = []
-
-
         for signatures in report['activities']:
+            #add Tags
+            self.add_tag(signatures)
+            #Extract Signatures
             signature = dict()
             signature['name'] = signatures
             self.results['signatures'].append(signature)
