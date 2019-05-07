@@ -18,23 +18,16 @@
 
             <label>Signatures</label>
             {% for signature in results.signatures %}
-                <div class="close-alert alert {% if signature.severity == 3 %}
-                alert-danger{% elif signature.severity == 2 %}
-                alert-warning{% else %}
-                alert-info{% endif %}">
+                <div class="
+                close-alert alert {% if signature.relevance == 3 %}
+                alert-danger {% elif signature.relevance == 2 %}
+                alert-warning {% else %}
+                alert-info {% endif %}">
                     {{signature.description}}
                 </div>
             {% endfor %}
             <div class="footer">
-                <hr />
-                <div class="stats">
-                    <ul>
-                        {% if current_user.has_permission('lastline_access') %}
-                            <li><a href="{{results.URL}}" target="_blank"><i class="pe-7s-link"></i> View Report</a></li>
-                        {% endif %}
-                        {{support_files(name)}}
-                    </ul>
-                </div>
+
             </div>
         </div>
     </div>

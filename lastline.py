@@ -159,32 +159,32 @@ class Lastline(ProcessingModule):
         self.results['score'] = float(data['score'])
 
         report = data.get('report')
+        reports = data.get('reports')
 
-
-        #add signatures
+        # add signatures
         self.results['signatures'] = []
-        for signatures in report['activities']:
-            #add Tags
-            self.add_tag(signatures)
-            #Extract Signatures
+        for addreport in reports:
+            # add Tags
+            self.add_tag(addreport.get('description'))
+            # Extract Signatures
             signature = dict()
-            signature['name'] = signatures
+            signature['description'] = addreport.get('description')
+            signature['relevance'] = addreport.get('relevance')
             self.results['signatures'].append(signature)
 
 
+        #add signatures
+        #self.results['signatures'] = []
+        #for signatures in report['activities']:
+        #    #add Tags
+        #    self.add_tag(signatures)
+        #    #Extract Signatures
+        #    signature = dict()
+        #    signature['name'] = signatures
+        #    self.results['signatures'].append(signature)
 
-        # if prefix == "signatures.item" and event == "end_map":
-        #     self.results['signatures'].append(signature)
-        #     signature = dict()
-        # elif prefix == "signatures.item.name":
-        #     signature['name'] = value
-        #     self.add_tag(value)
-        # elif prefix == "signatures.item.severity":
-        #     signature['severity'] = value
-        # elif prefix == "signatures.item.description":
-        #     signature['description'] = value
-        # elif prefix == "info.score":
-        #     self.results['score'] = float(value)
+
+
         # elif prefix in ["network.domains.item.domain", "network.hosts.item.ip", "network.http.item.uri"]:
         #     if value not in ["8.8.8.8", "8.8.4.4"]:
         # self.add_ioc(value)
