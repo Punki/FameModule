@@ -101,42 +101,48 @@ class Lastline(ProcessingModule):
         self.task_id = response.json()['data']['task_uuid']
 
     def wait_for_analysis(self):
+        taskfound = 'false'
+
         after = datetime.datetime.utcnow()
         after = after.strftime("%Y-%m-%d %H:%M:%S")
-
-        url = urljoin(self.api_endpoint, 'analysis/get_completed.json')
+        moreData = "moreData"
 
         waited_time = 0
-        while waited_time < self.wait_timeout:
-            payload = {"after": after}
-            response = requests.post(url, data=json.dumps(payload), headers={'content-type': 'application/json'})
-            # hole uiid von allen Taks,
-            # haben wir das mehr flag gesetzt? :wenn ja hole restliche uuid
-            # else
-            # pruefe ob die uuid uebereinstimmt
-            # break
-            # else sleep and repeat
+        analyzeduuids = []
+        while True:
+            while True:
+                url = urljoin(self.api_endpoint, 'analysis/get_completed.json')
 
-            # Counter vor setzen
-            after = response.json()["data"]["before"]
-            analyzedUUIDs = response.json()['data']['task']
+                # MoreData ist nur fuer DevServer
+                response = requests.post(url, data=json.dumps({moreData: 'nothing', "after": after}),
+                                         headers={'content-type': 'application/json'})
+                after = response.json()["data"]["before"]
+                # nur fuer DevServer neue Anfrage
+                moreData = "noMore"
 
-            print('analyzedUUIDs ist: ', analyzedUUIDs[0])
-            print('self.task_id ist:  ', self.task_id)
-
-            # while response.json['data']['more_results_available']
-            # fetch again
-
-            # Todo Schleife ueber die uuids und pruefen
-            if analyzedUUIDs[0] == self.task_id:
-                print("Break !!!")
+                # Gefundene Uuid Tasks in Liste packen
+                for uuid in response.json()['data']['tasks']:
+                    analyzeduuids.append(uuid)
+                # Sind noch mehr Uuids da zum holen?
+                if response.json()['data']['more_results_available'] != 1:
+                    # Keine weiteren tasks zum holen
+                    break
+            for actualTask in analyzeduuids:
+                if actualTask == self.task_id:
+                    print("Break !!!")
+                    taskfound = 'true'
+                    # UUID wurde gefunden
+                    break
+                else:
+                    time.sleep(self.wait_step)
+                    waited_time += self.wait_step
+            if taskfound == 'true':
                 break
+            elif waited_time > self.wait_timeout:
+                # Wirf Exception wenn Task nicht gefunden wurde
+                raise ModuleExecutionError('could not get report before timeout.')
+        print("Found TaskUUId !", taskfound)
 
-            time.sleep(self.wait_step)
-            waited_time += self.wait_step
-
-        if analyzedUUIDs[0] != self.task_id:
-            raise ModuleExecutionError('could not get report before timeout.')
 
     def process_report(self):
         url = urljoin(self.api_endpoint, '/analysis/get_result.json')

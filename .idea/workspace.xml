@@ -2,8 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="ebd5d873-1d73-4c94-8608-a137cea8dc85" name="Default Changelist" comment="">
+      <change beforePath="$USER_HOME$/PycharmProjects/PythonServer/server.py" beforeDir="false" afterPath="$USER_HOME$/PycharmProjects/PythonServer/server.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../cuckoo/details.html" beforeDir="false" afterPath="$PROJECT_DIR$/../cuckoo/OLD_details.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lastline.py" beforeDir="false" afterPath="$PROJECT_DIR$/lastline.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -13,23 +13,23 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/../cuckoo/cuckoo.py">
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$USER_HOME$/PycharmProjects/PythonServer/server.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="188">
-              <caret line="194" column="28" selection-start-line="194" selection-start-column="8" selection-end-line="194" selection-end-column="28" />
+            <state relative-caret-position="142">
+              <caret line="57" column="97" selection-start-line="57" selection-start-column="97" selection-end-line="57" selection-end-column="97" />
               <folding>
-                <element signature="e#0#9#0" expanded="true" />
+                <element signature="e#0#15#0" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/lastline.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="269">
-              <caret line="167" column="51" selection-start-line="167" selection-start-column="40" selection-end-line="167" selection-end-column="51" />
+            <state relative-caret-position="-778">
+              <caret line="134" column="25" lean-forward="true" selection-start-line="134" selection-start-column="25" selection-end-line="134" selection-end-column="25" />
               <folding>
                 <element signature="e#0#15#0" expanded="true" />
               </folding>
@@ -52,15 +52,15 @@
     </findStrings>
   </component>
   <component name="Git.Settings">
-    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/../.." />
+    <option name="RECENT_GIT_ROOT_PATH" value="$USER_HOME$/PycharmProjects/PythonServer" />
   </component>
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
         <option value="$PROJECT_DIR$/__init__.py" />
-        <option value="$USER_HOME$/PycharmProjects/PythonServer/server.py" />
         <option value="$PROJECT_DIR$/details.html" />
         <option value="$PROJECT_DIR$/lastline.py" />
+        <option value="$USER_HOME$/PycharmProjects/PythonServer/server.py" />
       </list>
     </option>
   </component>
@@ -87,6 +87,10 @@
             <path>
               <item name="lastline" type="b2602c69:ProjectViewProjectNode" />
               <item name="cuckoo" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="lastline" type="b2602c69:ProjectViewProjectNode" />
+              <item name="PythonServer" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
@@ -120,7 +124,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Python.lastline">
+  <component name="RunManager" selected="Python.server">
     <configuration name="cuckoo" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="cuckoo" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -213,12 +217,12 @@
     <frame x="67" y="25" width="1851" height="913" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.25" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.25" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
-      <window_info anchor="bottom" id="Run" order="2" weight="0.38392857" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.38392857" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.43112245" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -253,9 +257,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$USER_HOME$/PycharmProjects/PythonServer/report.json">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
     <entry file="file://$PROJECT_DIR$/../../../../../env/local/lib/python2.7/site-packages/ijson/backends/python.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="157">
@@ -267,26 +268,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="165">
           <caret line="491" selection-start-line="491" selection-end-line="491" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../cuckoo/cuckoo.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="188">
-          <caret line="194" column="28" selection-start-line="194" selection-start-column="8" selection-end-line="194" selection-end-column="28" />
-          <folding>
-            <element signature="e#0#9#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$USER_HOME$/PycharmProjects/PythonServer/server.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="401">
-          <caret line="58" column="42" lean-forward="true" selection-start-line="58" selection-start-column="42" selection-end-line="58" selection-end-column="42" />
-          <folding>
-            <element signature="e#0#15#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -304,10 +285,33 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/../cuckoo/cuckoo.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="849">
+          <caret line="194" column="28" selection-start-line="194" selection-start-column="8" selection-end-line="194" selection-end-column="28" />
+          <folding>
+            <element signature="e#0#9#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/PycharmProjects/PythonServer/report.json">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
     <entry file="file://$PROJECT_DIR$/lastline.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="269">
-          <caret line="167" column="51" selection-start-line="167" selection-start-column="40" selection-end-line="167" selection-end-column="51" />
+        <state relative-caret-position="-778">
+          <caret line="134" column="25" lean-forward="true" selection-start-line="134" selection-start-column="25" selection-end-line="134" selection-end-column="25" />
+          <folding>
+            <element signature="e#0#15#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/PycharmProjects/PythonServer/server.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="142">
+          <caret line="57" column="97" selection-start-line="57" selection-start-column="97" selection-end-line="57" selection-end-column="97" />
           <folding>
             <element signature="e#0#15#0" expanded="true" />
           </folding>
