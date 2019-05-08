@@ -102,10 +102,11 @@ class Lastline(ProcessingModule):
 
     def wait_for_analysis(self):
         taskfound = 'false'
-
+        #Format time to send Back to Server
         after = datetime.datetime.utcnow()
         after = after.strftime("%Y-%m-%d %H:%M:%S")
         moreData = "moreData"
+        jsonHeaders = {'content-type': 'application/json'}
 
         waited_time = 0
         analyzeduuids = []
@@ -113,39 +114,34 @@ class Lastline(ProcessingModule):
             while True:
                 url = urljoin(self.api_endpoint, 'analysis/get_completed.json')
 
-                # MoreData ist nur fuer DevServer
-                response = requests.post(url, data=json.dumps({moreData: 'nothing', "after": after}),
-                                         headers={'content-type': 'application/json'})
+                # MoreData only need for DevServer
+                response = requests.post(url, data=json.dumps({moreData: 'nothing', "after": after}), headers=jsonHeaders)
                 after = response.json()["data"]["before"]
-                # nur fuer DevServer neue Anfrage
                 moreData = "noMore"
 
-                # Gefundene Uuid Tasks in Liste packen
+                # Add found Uuids to a List
                 for uuid in response.json()['data']['tasks']:
                     analyzeduuids.append(uuid)
-                # Sind noch mehr Uuids da zum holen?
+                # Are there more to fetch?
                 if response.json()['data']['more_results_available'] != 1:
-                    # Keine weiteren tasks zum holen
+                    # No more uuids..
                     break
             for actualTask in analyzeduuids:
                 if actualTask == self.task_id:
                     print("Break !!!")
                     taskfound = 'true'
-                    # UUID wurde gefunden
+                    # Found the UUID from task
                     break
-                #else:
-                #    time.sleep(self.wait_step)
-                #    waited_time += self.wait_step
             if taskfound == 'true':
                 break
             elif waited_time > self.wait_timeout:
-                # Wirf Exception wenn Task nicht gefunden wurde
+                # Timeout, we found nothing
                 raise ModuleExecutionError('could not get report before timeout.')
             else:
                 time.sleep(self.wait_step)
                 waited_time += self.wait_step
 
-        print("Found TaskUUId !", taskfound)
+        self.log('info', "Found Task-UUID!")
 
     def process_report(self):
         url = urljoin(self.api_endpoint, '/analysis/get_result.json')
@@ -155,9 +151,7 @@ class Lastline(ProcessingModule):
         if response.status_code != 200:
             self.log('error', 'could not find report for task id {0}'.format(self.task_id))
         else:
-            # self.extract_info(response)
-            self.log('info', 'Alles Oke bis zu Analyse!')
-            # self.extract_info(response.content)
+            self.log('info', 'Next Step is Analyse of the Data!')
             self.extract_info(response)
 
     def extract_info(self, reportFullFromWeb):
@@ -167,7 +161,7 @@ class Lastline(ProcessingModule):
         print("Score", data['score'])
         self.results['score'] = float(data['score'])
 
-        report = data.get('report')
+        #report = data.get('report')
         reports = data.get('reports')
 
         # add signatures
