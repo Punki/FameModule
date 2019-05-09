@@ -32,19 +32,19 @@ class Lastline(ProcessingModule):
             'name': 'api_endpoint',
             'type': 'str',
             'default': 'http://127.0.0.1:8008/',
-            'description': "URL of Cuckoo's API endpoint."
+            'description': "URL of Lastlines's API endpoint."
         },
         {
             'name': 'wait_timeout',
             'type': 'integer',
             'default': 5400,
-            'description': 'Time in seconds that the module will wait for cuckoo analysis to be over.'
+            'description': 'Time in seconds that the module will wait for lastline analysis to be over.'
         },
         {
             'name': 'wait_step',
             'type': 'integer',
             'default': 30,
-            'description': "Time in seconds between two check of cuckoo's analysis status"
+            'description': "Time in seconds between two check of lastline's analysis status"
         },
         {
             'name': 'analysis_time',
