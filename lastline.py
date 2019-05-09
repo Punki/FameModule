@@ -25,20 +25,19 @@ class Lastline(ProcessingModule):
     name = "lastline"
     description = "Submit the file to Lastline Sandbox."
     acts_on = ["executable", "word", "html", "rtf", "excel", "pdf", "javascript", "jar", "url", "powerpoint", "vbs"]
-    generates = ["memory_dump"]
 
     config = [
         {
             'name': 'api_endpoint',
             'type': 'str',
             'default': 'http://127.0.0.1:8008/',
-            'description': "URL of Lastlines's API endpoint."
+            'description': "URL of Lastline's API endpoint."
         },
         {
             'name': 'wait_timeout',
             'type': 'integer',
             'default': 5400,
-            'description': 'Time in seconds that the module will wait for lastline analysis to be over.'
+            'description': 'Time in seconds that the module will wait for Lastline analysis to be over.'
         },
         {
             'name': 'wait_step',
@@ -52,6 +51,18 @@ class Lastline(ProcessingModule):
             'default': 300,
             'description': 'Time (in seconds) during which the sample will be analyzed.',
             'option': True
+        },
+        {
+            'name': 'username',
+            'type': 'str',
+            'default': 'none',
+            'description': "Username for Lastline"
+        },
+        {
+            'name': 'password',
+            'type': 'str',
+            'default': ' ',
+            'description': "Passwort for Lastline."
         }
     ]
 
@@ -68,6 +79,8 @@ class Lastline(ProcessingModule):
 
         options = self.define_options()
 
+        #Todo submit file
+
         # First, submit the file / URL
         self.submit_url(target, options)
 
@@ -82,6 +95,7 @@ class Lastline(ProcessingModule):
 
         return True
 
+    #Todo optionen überarbeiten
     def define_options(self):
         # if self.allow_internet_access:
         #     route = "internet"
@@ -94,6 +108,19 @@ class Lastline(ProcessingModule):
             'options': 'route={}'.format(route)
         }
 
+    def authenticate(self, options):
+        url = urljoin(self.api_endpoint, 'papi/login.json')
+        print("sende Requst mit user:" +self.user +" und password:"+ self.password)
+        response = requests.post(url, data=json.dumps(self.username, self.password), headers={'content-type': 'application/json'})
+        print("Response bei Authentification war: ", response)
+        #Todo Server methode zum überprüfen
+        if(response['success'] !=1):
+            print("can't authenticate on lastline!")
+            #Todo loggen in Error, raise up an exception
+
+
+
+
     def submit_url(self, target_url, options):
         url = urljoin(self.api_endpoint, '/papi/analysis/submit_url.json')
         options['url'] = target_url
@@ -102,9 +129,8 @@ class Lastline(ProcessingModule):
 
     def wait_for_analysis(self):
         taskfound = 'false'
-        #Format time to send Back to Server
+        # Format time to send Back to Server
         after = datetime.datetime.utcnow()
-        after = after.strftime("%Y-%m-%d %H:%M:%S")
         moreData = "moreData"
         jsonHeaders = {'content-type': 'application/json'}
 
@@ -115,7 +141,9 @@ class Lastline(ProcessingModule):
                 url = urljoin(self.api_endpoint, 'analysis/get_completed.json')
 
                 # MoreData only need for DevServer
-                response = requests.post(url, data=json.dumps({moreData: 'nothing', "after": after}), headers=jsonHeaders)
+                #Todo remove moreData
+                response = requests.post(url, data=json.dumps({moreData: 'nothing', "after": after}),
+                                         headers=jsonHeaders)
                 after = response.json()["data"]["before"]
                 moreData = "noMore"
 
@@ -161,7 +189,7 @@ class Lastline(ProcessingModule):
         print("Score", data['score'])
         self.results['score'] = float(data['score'])
 
-        #report = data.get('report')
+        # report = data.get('report')
         reports = data.get('reports')
 
         # add signatures
