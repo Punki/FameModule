@@ -84,6 +84,8 @@ class Lastline(ProcessingModule):
 
         #Todo submit file
 
+        self.authenticate()
+
         # First, submit the file / URL
         self.submit_url(target, options)
 
@@ -111,18 +113,14 @@ class Lastline(ProcessingModule):
             'options': 'route={}'.format(route)
         }
 
-    def authenticate(self, options):
+    def authenticate(self):
         url = urljoin(self.api_endpoint, 'papi/login.json')
-        print("sende Requst mit user:" +self.user +" und password:"+ self.password)
-        response = requests.post(url, data=json.dumps(self.username, self.password), headers={'content-type': 'application/json'})
-        print("Response bei Authentification war: ", response)
-        #Todo Server methode zum ueberpruefen
-        if(response['success'] !=1):
+        print("sende Requst mit user:" +self.username +" und password:"+ self.password)
+        response = requests.post(url, data=json.dumps({"username": self.username, "password": self.password}), headers={'content-type': 'application/json'})
+        print("ResponseSucces is:" , response.json()['success'] )
+        if(response.json()['success'] !="1"):
             print("can't authenticate on lastline!")
-            #Todo loggen in Error, raise up an exception
-
-
-
+            raise ModuleExecutionError('Could not Login in Lastlline')
 
     def submit_url(self, target_url, options):
         url = urljoin(self.api_endpoint, '/papi/analysis/submit_url.json')
