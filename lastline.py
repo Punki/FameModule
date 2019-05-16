@@ -1,3 +1,4 @@
+# coding: utf8
 import datetime
 import json
 import time
@@ -51,18 +52,6 @@ class Lastline(ProcessingModule):
             'default': 300,
             'description': 'Time (in seconds) during which the sample will be analyzed.',
             'option': True
-        },
-        {
-            'name': 'username',
-            'type': 'str',
-            'default': 'none',
-            'description': "Username for Lastline"
-        },
-        {
-            'name': 'password',
-            'type': 'str',
-            'default': ' ',
-            'description': "Passwort for Lastline."
         }
     ]
 
@@ -113,7 +102,7 @@ class Lastline(ProcessingModule):
         print("sende Requst mit user:" +self.user +" und password:"+ self.password)
         response = requests.post(url, data=json.dumps(self.username, self.password), headers={'content-type': 'application/json'})
         print("Response bei Authentification war: ", response)
-        #Todo Server methode zum überprüfen
+        #Todo Server methode zum ueberpruefen
         if(response['success'] !=1):
             print("can't authenticate on lastline!")
             #Todo loggen in Error, raise up an exception
@@ -131,6 +120,7 @@ class Lastline(ProcessingModule):
         taskfound = 'false'
         # Format time to send Back to Server
         after = datetime.datetime.utcnow()
+        after = after.strftime("%Y-%m-%d %H:%M:%S")
         moreData = "moreData"
         jsonHeaders = {'content-type': 'application/json'}
 
