@@ -23,6 +23,7 @@ from fame.core.module import ProcessingModule
 
 
 class Lastline(ProcessingModule):
+    useDevTestServer = "true"
     name = "lastline"
     description = "Submit the file to Lastline Sandbox."
     acts_on = ["executable", "word", "html", "rtf", "excel", "pdf", "javascript", "jar", "url", "powerpoint", "vbs"]
@@ -52,6 +53,18 @@ class Lastline(ProcessingModule):
             'default': 300,
             'description': 'Time (in seconds) during which the sample will be analyzed.',
             'option': True
+        },
+        {
+            'name': 'username',
+            'type': 'str',
+            'default': 'none',
+            'description': "Username for Lastline"
+        },
+        {
+            'name': 'password',
+            'type': 'str',
+            'default': ' ',
+            'description': "Passwort for Lastline."
         }
     ]
 
@@ -63,6 +76,7 @@ class Lastline(ProcessingModule):
             raise ModuleInitializationError(self, "Missing dependency: ijson")
 
     def each_with_type(self, target, file_type):
+        self.log('info', "RunWithDEVTestServer!!!")
         # Set root URLs
         self.results = dict()
 
@@ -129,13 +143,15 @@ class Lastline(ProcessingModule):
         while True:
             while True:
                 url = urljoin(self.api_endpoint, 'analysis/get_completed.json')
-
-                # MoreData only need for DevServer
-                #Todo remove moreData
-                response = requests.post(url, data=json.dumps({moreData: 'nothing', "after": after}),
-                                         headers=jsonHeaders)
-                after = response.json()["data"]["before"]
-                moreData = "noMore"
+                if self.useDevTestServer == "true":
+                    # MoreData only need for DevServer
+                    # Todo remove moreData
+                    response = requests.post(url, data=json.dumps({moreData: 'nothing', "after": after}), headers=jsonHeaders)
+                    after = response.json()["data"]["before"]
+                    moreData = "noMore"
+                else:
+                    response = requests.post(url, data=json.dumps({"after": after}),headers=jsonHeaders)
+                    after = response.json()["data"]["before"]
 
                 # Add found Uuids to a List
                 for uuid in response.json()['data']['tasks']:
